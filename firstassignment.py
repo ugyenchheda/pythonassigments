@@ -82,7 +82,28 @@ def create_note():
     new_notes = ttk.Entry(option_view,  font=("Arial 12"), width=30)
     new_notes.place(x=10, y=80)
 
+def logout():
+    option_view = Frame(window, width=368, height=300, bg=theme_color4)
+    option_view.grid(row=1, column=0)
+
+    note_view_text = Label(option_view, text="Log Out", width=21, padx=4, anchor=CENTER, font=('Arial 12'), bg=theme_color4, fg=theme_color3)
+    note_view_text.place(x=80, y=40)
+    
+    new_notes = ttk.Entry(option_view,  font=("Arial 12"), width=30)
+    new_notes.place(x=10, y=80)
+
+def retrieve_note():
+    option_view = Frame(window, width=368, height=300, bg=theme_color4)
+    option_view.grid(row=1, column=0)
+
+    note_view_text = Label(option_view, text="Retrieve a note", width=21, padx=4, anchor=CENTER, font=('Arial 12'), bg=theme_color4, fg=theme_color3)
+    note_view_text.place(x=80, y=40)
+    
+    new_notes = ttk.Entry(option_view,  font=("Arial 12"), width=30)
+    new_notes.place(x=10, y=80)
+
 def notes_view():
+
     option_view = Frame(window, width=368, height=300, bg=theme_color4)
     option_view.grid(row=1, column=0)
 
@@ -92,10 +113,10 @@ def notes_view():
     button =Button(option_view, text="1. Create a note", padx=5, justify=LEFT, height=1, bg=theme_color4,borderwidth=0, font=("Arial 11"), command=create_note)
     button.place(x=50, y=90)
 
-    button =Button(option_view, text="2. Retrieve a note", padx=5, justify=LEFT, height=1, bg=theme_color4,borderwidth=0, font=("Arial 11"), command=save_credentials)
+    button =Button(option_view, text="2. Retrieve a note", padx=5, justify=LEFT, height=1, bg=theme_color4,borderwidth=0, font=("Arial 11"), command=retrieve_note)
     button.place(x=50, y=130)
 
-    button =Button(option_view, text="3. Logout", padx=5, height=1, justify=LEFT, bg=theme_color4,borderwidth=0, font=("Arial 11"), command=save_credentials)
+    button =Button(option_view, text="3. Logout", padx=5, height=1, justify=LEFT, bg=theme_color4,borderwidth=0, font=("Arial 11"), command=logout)
     button.place(x=50, y=170)
 
     copy_right = Label(option_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Arial 9'), bg=theme_color4, fg=theme_color3)
