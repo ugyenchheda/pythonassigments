@@ -1,5 +1,5 @@
-from tkinter import Tk, ttk
-
+from tkinter import ttk
+import tkinter as tk
 from tkinter import *
 from tkinter.messagebox import showerror
 from PIL import Image, ImageTk
@@ -63,24 +63,45 @@ Password_text.place(x=20, y=150)
 Password = ttk.Entry(main, width=21, justify=CENTER, font=("Arial 12"))
 Password.place(x=80, y=175)
 
-
-def save_credentials():
+notes_list = []
+def user_dashboard():
+    user_name = "ugyen"
+    password= "ugyen"
     username_entered = username.get()
     password_entered = Password.get()
     if not username_entered or not password_entered:
             showerror("Error", "Both Username and Password are required.")
             return
+    
+    if user_name != username_entered:
+            showerror("Error", "User doesnot exist.")
+            return
+    if password_entered != password:
+            showerror("Error", "Incorrect Password.")
+            return
     notes_view()
 
 def create_note():
-    option_view = Frame(window, width=368, height=300, bg=theme_color4)
-    option_view.grid(row=1, column=0)
+    global notes_list
+    create_view = Frame(window, width=368, height=300, bg=theme_color4)
+    create_view.grid(row=1, column=0)
 
-    note_view_text = Label(option_view, text="Create Notes", width=21, padx=4, anchor=CENTER, font=('Arial 12'), bg=theme_color4, fg=theme_color3)
+    note_view_text = Label(create_view, text="Create Notes", width=21, padx=4, anchor=CENTER, font=('Arial 12'), bg=theme_color4, fg=theme_color3)
     note_view_text.place(x=80, y=40)
     
-    new_notes = ttk.Entry(option_view,  font=("Arial 12"), width=30)
+    new_notes = tk.Text(create_view,  font=("Arial 12"), height=6, width=38, highlightbackground="grey", highlightthickness=1)
     new_notes.place(x=10, y=80)
+    note_content = new_notes.get("1.0", "end-1c")
+    notes_list.append(note_content)
+    new_notes.delete("1.0", "end")
+    button_create =tk.Button(create_view, text="Save", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Arial", 12, "bold"), justify=CENTER)
+    button_create.place(x=10, y=230)
+    
+    button_cancel =tk.Button(create_view, text="Cancel", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Arial", 12, "bold"), justify=CENTER,command=user_dashboard)
+    button_cancel.place(x=182, y=230)
+    
+    copy_right = Label(create_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Arial 9'), bg=theme_color4, fg=theme_color3)
+    copy_right.place(x=25, y=280)
 
 def logout():
     option_view = Frame(window, width=368, height=300, bg=theme_color4)
@@ -99,11 +120,19 @@ def retrieve_note():
     note_view_text = Label(option_view, text="Retrieve a note", width=21, padx=4, anchor=CENTER, font=('Arial 12'), bg=theme_color4, fg=theme_color3)
     note_view_text.place(x=80, y=40)
     
-    new_notes = ttk.Entry(option_view,  font=("Arial 12"), width=30)
-    new_notes.place(x=10, y=80)
+        
+    extract_window = tk.Toplevel(window)
+    extract_window.title("Notes")
+
+    notes_text = tk.Text(extract_window, font=("Arial", 12), height=10, width=40)
+    notes_text.pack(padx=10, pady=10)
+
+    # Populate the Text widget with the notes from the notes_list
+    for note in notes_list:
+        notes_text.insert("end", note + "\n")
+        new_notes.place(x=10, y=80)
 
 def notes_view():
-
     option_view = Frame(window, width=368, height=300, bg=theme_color4)
     option_view.grid(row=1, column=0)
 
@@ -122,7 +151,7 @@ def notes_view():
     copy_right = Label(option_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Arial 9'), bg=theme_color4, fg=theme_color3)
     copy_right.place(x=25, y=280)
 
-button =Button(main, text="Continue", width=25, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Arial 12 bold"), justify=CENTER,command=save_credentials)
+button =Button(main, text="Continue", width=25, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Arial 12 bold"), justify=CENTER,command=user_dashboard)
 button.place(x=50, y=230)
 copy_right = Label(main, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Arial 9'), bg=theme_color4, fg=theme_color3)
 copy_right.place(x=25, y=280)
