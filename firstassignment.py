@@ -160,7 +160,7 @@ def display_full_note(note_content):
 
     note_text.insert(tk.END, note_content)
     
-    button_edit =tk.Button(note_view, text="Edit", width=10, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Arial", 12, "bold"), justify=CENTER, command=lambda: save_note(new_notes))
+    button_edit =tk.Button(note_view, text="Edit", width=10, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Arial", 12, "bold"), justify=CENTER, command='')
     button_edit.place(x=10, y=230)
     
     button_delete =tk.Button(note_view, text="Delete", width=10, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Arial", 12, "bold"), justify=CENTER,command=user_dashboard)
