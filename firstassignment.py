@@ -7,17 +7,15 @@ import os
 
 script_dir = os.path.dirname(__file__)
 image_path = os.path.join(script_dir, "images", "login.png")
-# Open the image
 image = Image.open(image_path)
 
-# Define the new size (e.g., 200x200 pixels)
 new_size = (200, 200)
 
-# Resize the image
 resized_image = image.resize(new_size)
 
 theme_color1 = "blue"
 theme_color2 = "#3b474d"
+theme_header = "#a9d2fe"
 theme_color3 = "black"
 theme_color4 = "white"
 theme_color5 = "#3b474d"
@@ -36,14 +34,11 @@ top.grid(row=0, column=0)
 
 main = Frame(window, width=368, height=300, bg=theme_color4)
 main.grid(row=1, column=0)
-
 image = Image.open(image_path)
 photo = ImageTk.PhotoImage(image)
 
-
-
 # Top frame
-app_name = Label(top, image=photo, compound=LEFT, text="Python Assignment 1", height=10, padx=13, pady=40, relief="solid", anchor=CENTER, font=('Arial 16 bold'), bg=theme_color2, fg=theme_color4)
+app_name = Label(top, image=photo, compound=LEFT, text="My Note List", height=10,width=320, padx=13, pady=40, relief="solid", anchor=CENTER, font=("Helvetica ", 20, "bold"), bg=theme_color5, fg=theme_color4)
 app_name.photo = photo  
 app_name.place(x=0, y=0)
 
@@ -51,17 +46,17 @@ app_name.place(x=0, y=0)
 welcome = Label(main, text="Welcome", width=21, height=2, pady=10, anchor=CENTER, font=('Arial 16 bold'), bg=theme_color4, fg=theme_color3)
 welcome.place(x=44, y=5)
 
-login_text = Label(main, text="Login to Proceed", width=21, padx=4, anchor=CENTER, font=('Arial 12'), bg=theme_color4, fg=theme_color3)
+login_text = Label(main, text="Login to Proceed", width=21, padx=4, anchor=CENTER, font=('Arial 11'), bg=theme_color4, fg=theme_color3)
 login_text.place(x=80, y=55)
 
 username_text = Label(main, text="Username:", width=21, padx=4, anchor=CENTER, font=('Arial 11'), bg=theme_color4, fg=theme_color3)
 username_text.place(x=20, y=95)
-username = ttk.Entry(main, width=21, justify=CENTER, font=("Arial 12"))
+username = ttk.Entry(main, width=21, justify=LEFT, font=("Arial 12"))
 username.place(x=80, y=120)
 
 Password_text = Label(main, text="Password:", width=21, padx=4, anchor=CENTER, font=('Arial 11'), bg=theme_color4, fg=theme_color3)
 Password_text.place(x=20, y=150)
-Password = ttk.Entry(main, width=21, justify=CENTER, font=("Arial 12"))
+Password = ttk.Entry(main, width=21, justify=LEFT, font=("Arial 12"))
 Password.place(x=80, y=175)
 
 notes_list = []
@@ -123,12 +118,12 @@ def all_note_lists():
     option_view = Frame(window, width=368, height=300, bg=theme_color4)
     option_view.grid(row=1, column=0)
 
-    note_view_text = Label(option_view, text="My Notes", width=21, padx=4, anchor=CENTER, font=('Arial 12'), bg=theme_color4, fg=theme_color3)
-    note_view_text.place(x=80, y=30)   
+    note_view_text = Label(option_view, text="My Notes", width=21, padx=4, anchor=CENTER, font=('Arial 16 bold'), bg=theme_color4, fg=theme_color3)
+    note_view_text.place(x=40, y=30)   
 
     if not notes_list:
         no_notes_label = Label(option_view, text="No note has been added yet.", font=("Arial", 12, "bold"), bg=theme_color4, fg=theme_danger)
-        no_notes_label.place(x=80, y=130) 
+        no_notes_label.place(x=80, y=110) 
 
         button_create =tk.Button(option_view, text="Add", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Arial", 12, "bold"), justify=CENTER, command=create_note)
         button_create.place(x=10, y=230)
@@ -142,15 +137,39 @@ def all_note_lists():
             note_title = note[:25]
             notes_label = tk.Label(option_view, text=f"{note_number}) {note_title}", font=("Arial", 12), bg=theme_color4, fg=theme_color3)
             notes_label.place(x=10, y=note_position)
+            notes_label.bind("<Button-1>", lambda event, content=note: display_full_note(content))
             note_position += 30
             note_number += 1
 
             button_cancel =tk.Button(option_view, text="Go to Dashboard", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Arial", 12, "bold"), justify=CENTER,command=user_dashboard)
             button_cancel.place(x=98, y=230)   
-
-
-    
+ 
     copy_right = Label(option_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Arial 9'), bg=theme_color4, fg=theme_color3)
+    copy_right.place(x=25, y=280)
+
+def display_full_note(note_content):
+    note_view = Frame(window, width=368, height=300, bg=theme_color4)
+    note_view.grid(row=1, column=0)
+
+    note_view_text = Label(note_view, text="Single Note Page", width=21, padx=4, anchor=CENTER, font=('Arial 14 bold'), bg=theme_color4, fg=theme_color3)
+    note_view_text.place(x=40, y=30)   
+
+    note_text = tk.Text(note_view, wrap=tk.WORD,font=('Arial 12'),  height=6, width=38, highlightbackground="grey", highlightthickness=1)
+    note_text.pack()
+    note_text.place(x=10, y=80)
+
+    note_text.insert(tk.END, note_content)
+    
+    button_edit =tk.Button(note_view, text="Edit", width=10, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Arial", 12, "bold"), justify=CENTER, command=lambda: save_note(new_notes))
+    button_edit.place(x=10, y=230)
+    
+    button_delete =tk.Button(note_view, text="Delete", width=10, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Arial", 12, "bold"), justify=CENTER,command=user_dashboard)
+    button_delete.place(x=120, y=230)
+    
+    button_done =tk.Button(note_view, text="Done", width=10, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Arial", 12, "bold"), justify=CENTER,command=user_dashboard)
+    button_done.place(x=230, y=230)
+    
+    copy_right = Label(note_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Arial 9'), bg=theme_color4, fg=theme_color3)
     copy_right.place(x=25, y=280)
 
 def notes_view():
@@ -166,7 +185,7 @@ def notes_view():
     button =Button(option_view, text="2. Retrieve a note", padx=5, justify=LEFT, height=1, bg=theme_color4,borderwidth=0, font=("Arial 11"), command=all_note_lists)
     button.place(x=50, y=130)
 
-    button =Button(option_view, text="3. Logout", padx=5, height=1, justify=LEFT, bg=theme_color4,borderwidth=0, font=("Arial 11"), command=logout)
+    button =Button(option_view, text="3. Logout", padx=5, height=1, justify=LEFT, bg=theme_color4,borderwidth=0, font=("Arial 11"))
     button.place(x=50, y=170)
 
     copy_right = Label(option_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Arial 9'), bg=theme_color4, fg=theme_color3)
