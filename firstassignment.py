@@ -126,7 +126,12 @@ def logout():
     
     new_notes = ttk.Entry(option_view,  font=("Helvetica 12"), width=30)
     new_notes.place(x=10, y=80)
-
+    
+def delete_notes():
+    selected_index = note_listbox.curselection()
+    if selected_index:
+        note_listbox.delete(selected_index)
+    
 def all_note_lists():
     option_view = Frame(window, width=368, height=300, bg=theme_color4)
     option_view.grid(row=1, column=0)
