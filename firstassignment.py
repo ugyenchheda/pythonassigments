@@ -252,6 +252,11 @@ def display_full_note(note_index, note_date, note_subject, note_content):
     button_edit =tk.Button(note_view, text="Edit", width=10, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12, "bold"), justify=CENTER, command=edit_current_note)
     button_edit.place(x=10, y=230)
 
+    def delete_current_note():
+        nonlocal note_index
+        if 0 <= note_index < len(notes_list):
+            notes_list.pop(note_index)
+            all_note_lists()
 
     button_delete =tk.Button(note_view, text="Delete", width=10, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12, "bold"), justify=CENTER, command=delete_current_note)
     button_delete.place(x=120, y=230)
