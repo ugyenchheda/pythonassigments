@@ -202,16 +202,16 @@ def all_note_lists():
         button_create =tk.Button(option_view, text="Add", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12, "bold"), justify=CENTER, command=create_note)
         button_create.place(x=10, y=230)
         
-        button_cancel =tk.Button(option_view, text="Cancel", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12, "bold"), justify=CENTER,command=user_dashboard)
+        button_cancel =tk.Button(option_view, text="Dashboard", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12, "bold"), justify=CENTER,command=user_dashboard)
         button_cancel.place(x=182, y=230)
     else:
         note_position = 80
         note_number = 1
-        for note in notes_list:
-            note_title = note[:25]
-            notes_label = tk.Label(option_view, text=f"{note_number}) {note_title}", font=("Helvetica", 12), bg=theme_color4, fg=theme_color3)
+        for note_index, note in enumerate(notes_list):
+            subject = note["Subject"][:25]
+            notes_label = tk.Label(option_view, text=f"{note_index + 1}) {subject}", font=("Helvetica", 12), bg=theme_color4, fg=theme_color3)
             notes_label.place(x=10, y=note_position)
-            notes_label.bind("<Button-1>", lambda event, content=note: display_full_note(content))
+            notes_label.bind("<Button-1>", lambda event, index=note_index: display_full_note(index, notes_list[index]["Date"], notes_list[index]["Subject"], notes_list[index]["Notes"]))
             note_position += 30
             note_number += 1
 
@@ -221,20 +221,39 @@ def all_note_lists():
     copy_right = Label(option_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
     copy_right.place(x=25, y=280)
 
-def display_full_note(note_content):
+def display_full_note(note_index, note_date, note_subject, note_content):
+    global current_note_index
+    current_note_index = note_index
+
     note_view = Frame(window, width=368, height=300, bg=theme_color4)
     note_view.grid(row=1, column=0)
 
     note_view_text = Label(note_view, text="Single Note Page", width=21, padx=4, anchor=CENTER, font=('Helvetica 14 bold'), bg=theme_color4, fg=theme_color3)
     note_view_text.place(x=40, y=30)   
 
-    note_text = tk.Label(note_view, text=note_content, wraplength=300, font=('Helvetica 12'), bg=theme_color4)
-    note_text.place(x=10, y=80)
+    date_label = tk.Label(note_view, text="Date: ", font=('Helvetica 12'), bg=theme_color4)
+    date_label.place(x=10, y=80)   
+
+    date_value = tk.Label(note_view, text=note_date, wraplength=300, font=('Helvetica 12'), bg=theme_color4)
+    date_value.place(x=70, y=80)  
+
+    subject_label = tk.Label(note_view, text="Subject: ", font=('Helvetica 12'), bg=theme_color4)
+    subject_label.place(x=10, y=105)  
+
+    subject_value = tk.Label(note_view, text=note_subject, wraplength=300, font=('Helvetica 12'), bg=theme_color4)
+    subject_value.place(x=70, y=105)
+
+    note_label = tk.Label(note_view, text="Note: ", font=('Helvetica 12'), bg=theme_color4)
+    note_label.place(x=10, y=130)  
+
+    note_value = tk.Label(note_view, text=note_content, wraplength=250, anchor='w', font=('Helvetica 12'), bg=theme_color4)
+    note_value.place(x=70, y=130)
     
-    button_edit =tk.Button(note_view, text="Edit", width=10, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12, "bold"), justify=CENTER, command='')
+    button_edit =tk.Button(note_view, text="Edit", width=10, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12, "bold"), justify=CENTER, command=edit_current_note)
     button_edit.place(x=10, y=230)
-    
-    button_delete =tk.Button(note_view, text="Delete", width=10, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12, "bold"), justify=CENTER,command='')
+
+
+    button_delete =tk.Button(note_view, text="Delete", width=10, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12, "bold"), justify=CENTER, command=delete_current_note)
     button_delete.place(x=120, y=230)
     
     button_done =tk.Button(note_view, text="Done", width=10, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12, "bold"), justify=CENTER,command=user_dashboard)
@@ -242,6 +261,7 @@ def display_full_note(note_content):
     
     copy_right = Label(note_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
     copy_right.place(x=25, y=280)
+
 
 def notes_view():
     option_view = Frame(window, width=368, height=300, bg=theme_color4)
@@ -256,7 +276,7 @@ def notes_view():
     button =Button(option_view, text="2. Retrieve a note", padx=5, justify=LEFT, height=1, bg=theme_color4,borderwidth=0, font=("Helvetica 11"), command=all_note_lists)
     button.place(x=50, y=130)
 
-    button =Button(option_view, text="3. Logout", padx=5, height=1, justify=LEFT, bg=theme_color4,borderwidth=0, font=("Helvetica 11"))
+    button =Button(option_view, text="3. Logout", padx=5, height=1, justify=LEFT, bg=theme_color4,borderwidth=0, font=("Helvetica 11"), command=user_dashboard)
     button.place(x=50, y=170)
 
     copy_right = Label(option_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
