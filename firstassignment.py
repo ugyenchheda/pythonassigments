@@ -55,6 +55,7 @@ Password_text.place(x=20, y=150)
 Password = ttk.Entry(main, width=21, justify=LEFT, font=("Helvetica 12"))
 Password.place(x=80, y=175)
 
+
 def user_dashboard():
     global global_username  
     user_name = "Ugyen"
@@ -75,6 +76,30 @@ def user_dashboard():
     global_username = username_entered
     notes_view()
 
+button =Button(main, text="Continue", width=25, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica 12 bold"), justify=CENTER,command=user_dashboard)
+button.place(x=50, y=230)
+copy_right = Label(main, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
+copy_right.place(x=25, y=280)
+
+def notes_view():
+    option_view = Frame(window, width=368, height=300, bg=theme_color4)
+    option_view.grid(row=1, column=0)
+
+    note_view_text = Label(option_view, text="Choose Option", width=21, padx=4, anchor=CENTER, font=('Helvetica 12'), bg=theme_color4, fg=theme_color3)
+    note_view_text.place(x=80, y=40)
+
+    button =Button(option_view, text="1. Create a note", padx=5, justify=LEFT, height=1, bg=theme_color4,borderwidth=0, font=("Helvetica 11"), command=create_note)
+    button.place(x=50, y=90)
+
+    button =Button(option_view, text="2. Retrieve a note", padx=5, justify=LEFT, height=1, bg=theme_color4,borderwidth=0, font=("Helvetica 11"), command=all_note_lists)
+    button.place(x=50, y=130)
+
+    button =Button(option_view, text="3. Logout", padx=5, height=1, justify=LEFT, bg=theme_color4,borderwidth=0, font=("Helvetica 11"), command=user_dashboard)
+    button.place(x=50, y=170)
+
+    copy_right = Label(option_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
+    copy_right.place(x=25, y=280)
+    
 note_date = None
 note_subject = None
 new_notes = None
@@ -92,7 +117,7 @@ def show_calendar(event):
     calendar_window = tk.Toplevel(window)
     calendar_window.title("Select Date")
 
-    cal = Calendar(calendar_window, selectmode="day", year=2023, month=9, day=24)
+    cal = Calendar(calendar_window, selectmode="day", year=2023, month=9, day=30)
     cal.pack()
 
     get_date_button = tk.Button(calendar_window, text="Get Selected Date", command=lambda: get_selected_date(cal))
@@ -267,30 +292,55 @@ def display_full_note(note_index, note_date, note_subject, note_content):
     copy_right = Label(note_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
     copy_right.place(x=25, y=280)
 
+current_note_index = None
 
-def notes_view():
-    option_view = Frame(window, width=368, height=300, bg=theme_color4)
-    option_view.grid(row=1, column=0)
+def edit_current_note():
+    global current_note_index
+    if 0 <= current_note_index < len(notes_list):
+        
+        note_edit_window = tk.Toplevel(window)
+        note_edit_window.title("Edit Note")
+        note_edit_window.configure(bg=theme_color4)
 
-    note_view_text = Label(option_view, text="Choose Option", width=21, padx=4, anchor=CENTER, font=('Helvetica 12'), bg=theme_color4, fg=theme_color3)
-    note_view_text.place(x=80, y=40)
+        current_note = notes_list[current_note_index]
+        current_date = current_note["Date"]
+        current_subject = current_note["Subject"]
+        current_content = current_note["Notes"]
+        
+        date_label = tk.Label(note_edit_window, text="Date:")
+        date_label.pack()
+        date_entry = tk.Entry(note_edit_window)
+        date_entry.insert(0, current_date)
+        date_entry.pack()
+        
+        subject_label = tk.Label(note_edit_window, text="Subject:")
+        subject_label.pack()
+        subject_entry = tk.Entry(note_edit_window)
+        subject_entry.insert(0, current_subject)
+        subject_entry.pack()
+        
+        content_label = tk.Label(note_edit_window, text="Content:")
+        content_label.pack()
+        content_text = tk.Text(note_edit_window, wrap=tk.WORD, height=10, width=40)
+        content_text.insert(tk.END, current_content)
+        content_text.pack()
+        
+        def save_edited_note():
+            new_date = date_entry.get()
+            new_subject = subject_entry.get()
+            new_content = content_text.get("1.0", tk.END)
+            
+            notes_list[current_note_index]["Date"] = new_date
+            notes_list[current_note_index]["Subject"] = new_subject
+            notes_list[current_note_index]["Notes"] = new_content
+            
+            note_edit_window.destroy()
+            
+            all_note_lists()
+        
+        save_button = tk.Button(note_edit_window, text="Save",padx=5, height=1, justify=LEFT, bg=theme_color5,fg=theme_color4,borderwidth=0, font=("Helvetica 11"), command=save_edited_note)
+        save_button.pack()
 
-    button =Button(option_view, text="1. Create a note", padx=5, justify=LEFT, height=1, bg=theme_color4,borderwidth=0, font=("Helvetica 11"), command=create_note)
-    button.place(x=50, y=90)
-
-    button =Button(option_view, text="2. Retrieve a note", padx=5, justify=LEFT, height=1, bg=theme_color4,borderwidth=0, font=("Helvetica 11"), command=all_note_lists)
-    button.place(x=50, y=130)
-
-    button =Button(option_view, text="3. Logout", padx=5, height=1, justify=LEFT, bg=theme_color4,borderwidth=0, font=("Helvetica 11"), command=user_dashboard)
-    button.place(x=50, y=170)
-
-    copy_right = Label(option_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
-    copy_right.place(x=25, y=280)
-
-button =Button(main, text="Continue", width=25, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica 12 bold"), justify=CENTER,command=user_dashboard)
-button.place(x=50, y=230)
-copy_right = Label(main, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
-copy_right.place(x=25, y=280)
 
 
 
