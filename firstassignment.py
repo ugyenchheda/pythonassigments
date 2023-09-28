@@ -5,6 +5,7 @@ from tkcalendar import Calendar
 from tkinter.messagebox import showerror
 from PIL import Image, ImageTk
 import os
+from tkinter import messagebox
 
 theme_color1 = "blue"
 theme_color2 = "#3b474d"
@@ -328,6 +329,7 @@ def display_full_note(note_index, note_date, note_subject, note_content):
         if 0 <= current_note_index < len(user_notes[global_username]):
             user_notes[global_username].pop(current_note_index)
             all_note_lists()
+            messagebox.showinfo("Note Deleted", "Notes deleted successfully!")
 
     button_delete =tk.Button(note_view, text="Delete", width=10, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12, "bold"), justify=CENTER, command=delete_current_note)
     button_delete.place(x=120, y=230)
@@ -373,5 +375,37 @@ def edit_current_note():
         content_text.insert(tk.END, current_content)
         content_text.pack()
         
+        def save_edited_note():
+            global current_note_index
+            global global_username
+
+            if global_username in user_notes:
+                user_notes_list = user_notes[global_username]
+
+                if 0 <= current_note_index < len(user_notes_list):
+                    new_date = date_entry.get()
+                    new_subject = subject_entry.get()
+                    new_content = content_text.get("1.0", tk.END)
+
+                    # Update the note at the current index
+                    user_notes_list[current_note_index]["Date"] = new_date
+                    user_notes_list[current_note_index]["Subject"] = new_subject
+                    user_notes_list[current_note_index]["Notes"] = new_content
+
+                    # Close the edit window
+                    note_edit_window.destroy()
+
+                    # Refresh the note list
+                    all_note_lists()
+                    messagebox.showinfo("Note Saved", "Your edited note has been saved successfully!")
+                else:
+                    # Handle the case where the current_note_index is out of bounds
+                    showerror("Error", "Invalid note index.")
+            else:
+                # Handle the case where the global_username is not found in user_notes
+                showerror("Error", "User not found in user_notes.")
+        
+        save_button = tk.Button(note_edit_window, text="Save",padx=5, height=1, justify=LEFT, bg=theme_color5,fg=theme_color4,borderwidth=0, font=("Helvetica 11"), command=save_edited_note)
+        save_button.pack()
 
 window.mainloop()
