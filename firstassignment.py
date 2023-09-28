@@ -338,4 +338,40 @@ def display_full_note(note_index, note_date, note_subject, note_content):
     copy_right = Label(note_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
     copy_right.place(x=25, y=280)
 
+def edit_current_note():
+    global current_note_index
+    global global_username 
+    
+    if global_username in user_notes:
+        user_notes_list = user_notes[global_username]
+
+        if 0 <= current_note_index < len(user_notes_list):
+            note_edit_window = tk.Toplevel(window)
+            note_edit_window.title("Edit Note")
+            note_edit_window.configure(bg=theme_color4)
+
+            current_note = user_notes_list[current_note_index]
+            current_date = current_note["Date"]
+            current_subject = current_note["Subject"]
+            current_content = current_note["Notes"]
+        
+        date_label = tk.Label(note_edit_window, text="Date:")
+        date_label.pack()
+        date_entry = tk.Entry(note_edit_window)
+        date_entry.insert(0, current_date)
+        date_entry.pack()
+        
+        subject_label = tk.Label(note_edit_window, text="Subject:")
+        subject_label.pack()
+        subject_entry = tk.Entry(note_edit_window)
+        subject_entry.insert(0, current_subject)
+        subject_entry.pack()
+        
+        content_label = tk.Label(note_edit_window, text="Content:")
+        content_label.pack()
+        content_text = tk.Text(note_edit_window, wrap=tk.WORD, height=10, width=40)
+        content_text.insert(tk.END, current_content)
+        content_text.pack()
+        
+
 window.mainloop()
