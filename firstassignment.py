@@ -18,7 +18,7 @@ transparent_theme = "FF0000AA"
 
 window = Tk()
 window.geometry('368x420')
-window.title("Ugyen's Assignment")
+window.title("Ugyen's First Assignment")
 window.configure(bg=theme_color4)
 window.resizable(height=FALSE, width=FALSE)
 
@@ -40,22 +40,43 @@ top_background_photo = ImageTk.PhotoImage(top_background_image)
 top_background_label = Label(top, image=top_background_photo)
 top_background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
-welcome = Label(main, text="Welcome", width=21, height=2, pady=10, anchor=CENTER, font=('Helvetica 16 bold'), bg=theme_color4, fg=theme_color3)
-welcome.place(x=44, y=5)
+def login_page():
+    global username
+    global Password
+    welcome = Label(main, text="Welcome", width=21, height=2, pady=10, anchor=CENTER, font=('Helvetica 16 bold'), bg=theme_color4, fg=theme_color3)
+    welcome.place(x=44, y=5)
 
-login_text = Label(main, text="Login to Proceed", width=21, padx=4, anchor=CENTER, font=('Helvetica 11'), bg=theme_color4, fg=theme_color3)
-login_text.place(x=80, y=55)
+    login_text = Label(main, text="Login to Proceed", width=21, padx=4, anchor=CENTER, font=('Helvetica 11'), bg=theme_color4, fg=theme_color3)
+    login_text.place(x=80, y=55)
 
-username_text = Label(main, text="Username:", width=21, padx=4, anchor=CENTER, font=('Helvetica 11'), bg=theme_color4, fg=theme_color3)
-username_text.place(x=20, y=95)
-username = ttk.Entry(main, width=21, justify=LEFT, font=("Helvetica 12"))
-username.place(x=80, y=120)
+    username_text = Label(main, text="Username:", width=21, padx=4, anchor=CENTER, font=('Helvetica 11'), bg=theme_color4, fg=theme_color3)
+    username_text.place(x=20, y=95)
+    username = ttk.Entry(main, width=21, justify=LEFT, font=("Helvetica 12"))
+    username.place(x=80, y=120)
 
-Password_text = Label(main, text="Password:", width=21, padx=4, anchor=CENTER, font=('Helvetica 11'), bg=theme_color4, fg=theme_color3)
-Password_text.place(x=20, y=150)
-Password = ttk.Entry(main, width=21, justify=LEFT, font=("Helvetica 12"))
-Password.place(x=80, y=175)
+    Password_text = Label(main, text="Password:", width=21, padx=4, anchor=CENTER, font=('Helvetica 11'), bg=theme_color4, fg=theme_color3)
+    Password_text.place(x=20, y=150)
+    Password = ttk.Entry(main, width=21, justify=LEFT, font=("Helvetica 12"))
+    Password.place(x=80, y=175)
+    welcome = Label(main, text="Welcome", width=21, height=2, pady=10, anchor=CENTER, font=('Helvetica 16 bold'), bg=theme_color4, fg=theme_color3)
+    welcome.place(x=44, y=5)
 
+    login_text = Label(main, text="Login to Proceed", width=21, padx=4, anchor=CENTER, font=('Helvetica 11'), bg=theme_color4, fg=theme_color3)
+    login_text.place(x=80, y=55)
+
+    username_text = Label(main, text="Username:", width=21, padx=4, anchor=CENTER, font=('Helvetica 11'), bg=theme_color4, fg=theme_color3)
+    username_text.place(x=20, y=95)
+    username = ttk.Entry(main, width=21, justify=LEFT, font=("Helvetica 12"))
+    username.place(x=80, y=120)
+
+    Password_text = Label(main, text="Password:", width=21, padx=4, anchor=CENTER, font=('Helvetica 11'), bg=theme_color4, fg=theme_color3)
+    Password_text.place(x=20, y=150)
+    Password = ttk.Entry(main, width=21, justify=LEFT, font=("Helvetica 12"))
+    Password.place(x=80, y=175)
+    button =Button(main, text="Continue", width=25, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica 12 bold"), justify=CENTER,command=user_authentication)
+    button.place(x=50, y=230)
+    copy_right = Label(main, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
+    copy_right.place(x=25, y=280)
 
 users = ["Ugyen", "user1", "user2", "user3"]
 passwords = ["a", "pass1", "pass2", "pass3"]
@@ -79,11 +100,6 @@ def user_authentication():
     global_username = username_entered
     dashboard()
 
-button =Button(main, text="Continue", width=25, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica 12 bold"), justify=CENTER,command=user_authentication)
-button.place(x=50, y=230)
-copy_right = Label(main, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
-copy_right.place(x=25, y=280)
-
 def dashboard():
     option_view = Frame(window, width=368, height=300, bg=theme_color4)
     option_view.grid(row=1, column=0)
@@ -97,12 +113,18 @@ def dashboard():
     button =Button(option_view, text="2. Retrieve a note", padx=5, justify=LEFT, height=1, bg=theme_color4,borderwidth=0, font=("Helvetica 11"), command=all_note_lists)
     button.place(x=50, y=130)
 
-    button =Button(option_view, text="3. Logout", padx=5, height=1, justify=LEFT, bg=theme_color4,borderwidth=0, font=("Helvetica 11"), command=user_authentication)
+    button =Button(option_view, text="3. Logout", padx=5, height=1, justify=LEFT, bg=theme_color4,borderwidth=0, font=("Helvetica 11"), command=logout)
     button.place(x=50, y=170)
 
     copy_right = Label(option_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
     copy_right.place(x=25, y=280)
-    
+
+def logout():
+    global global_username
+    global_username = None
+    main.grid_forget()
+    login_page()  
+
 note_date = None
 note_subject = None
 new_notes = None
@@ -165,7 +187,6 @@ def create_note():
     copy_right = Label(create_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
     copy_right.place(x=25, y=280)
 
-
 user_notes = {
     "Ugyen": [
         {
@@ -199,7 +220,7 @@ user_notes = {
             "Notes": "Brainstorming session:\n- New product ideas\n- Marketing strategies"
         }
     ],
-    "user3": []  # user3 has no notes yet
+    "user3": []  
 }
 def save_note():    
     global note_date
@@ -248,18 +269,8 @@ def save_note():
     copy_right = tk.Label(create_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
     copy_right.place(x=25, y=280)
 
-def logout():
-    option_view = Frame(window, width=368, height=300, bg=theme_color4)
-    option_view.grid(row=1, column=0)
-
-    note_view_text = Label(option_view, text="Log Out", width=21, padx=4, anchor=CENTER, font=('Helvetica 12'), bg=theme_color4, fg=theme_color3)
-    note_view_text.place(x=80, y=40)
-    
-    new_notes = ttk.Entry(option_view,  font=("Helvetica 12"), width=30)
-    new_notes.place(x=10, y=80)
-
 def all_note_lists():
-    global user_notes  # Declare user_notes as a global variable here
+    global user_notes  
 
     option_view = Frame(window, width=368, height=300, bg=theme_color4)
     option_view.grid(row=1, column=0)
@@ -387,25 +398,21 @@ def edit_current_note():
                     new_subject = subject_entry.get()
                     new_content = content_text.get("1.0", tk.END)
 
-                    # Update the note at the current index
                     user_notes_list[current_note_index]["Date"] = new_date
                     user_notes_list[current_note_index]["Subject"] = new_subject
                     user_notes_list[current_note_index]["Notes"] = new_content
 
-                    # Close the edit window
                     note_edit_window.destroy()
-
-                    # Refresh the note list
                     all_note_lists()
                     messagebox.showinfo("Note Saved", "Your edited note has been saved successfully!")
                 else:
-                    # Handle the case where the current_note_index is out of bounds
                     showerror("Error", "Invalid note index.")
             else:
-                # Handle the case where the global_username is not found in user_notes
                 showerror("Error", "User not found in user_notes.")
         
         save_button = tk.Button(note_edit_window, text="Save",padx=5, height=1, justify=LEFT, bg=theme_color5,fg=theme_color4,borderwidth=0, font=("Helvetica 11"), command=save_edited_note)
         save_button.pack()
 
+
+login_page()
 window.mainloop()
