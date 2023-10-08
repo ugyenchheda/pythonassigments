@@ -74,8 +74,6 @@ def login_page():
     copy_right = Label( main, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=("Helvetica 9"), bg=theme_color4, fg=theme_color3)
     copy_right.place(x=25, y=280)
 
-
-
 def user_authentication():
     global global_username   
     username_entered = username.get()
@@ -175,7 +173,7 @@ def create_note():
     button_create =tk.Button(create_view, text="Save", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12, "bold"), justify=CENTER, command=save_note)
     button_create.place(x=10, y=230)
     
-    button_cancel =tk.Button(create_view, text="Cancel", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12, "bold"), justify=CENTER,command=user_authentication)
+    button_cancel =tk.Button(create_view, text="Cancel", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12, "bold"), justify=CENTER,command=dashboard)
     button_cancel.place(x=182, y=230)
     
     copy_right = Label(create_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
@@ -185,14 +183,26 @@ user_notes = {
     "a": [
         {
             "Date": "2023-09-28",
-            "Subject": "Complete IOT Assignment",
+            "Subject": "python assignment 1",
             "Notes": "Fourth lab needs to be written by ugyen.."
         },
         {
            
             "Date": "2023-10-28",
-            "Subject": "Helsinki",
+            "Subject": "Database and OOP",
             "Notes": "Go to Helsinki for some good time."
+        },
+        {
+           
+            "Date": "2023-10-28",
+            "Subject": "Fullstack using oop",
+            "Notes": "OOPs is very important."
+        },
+        {
+           
+            "Date": "2023-10-28",
+            "Subject": "Python lab",
+            "Notes": "Attend python lab next week."
         }
     ],
     "user1": [
@@ -258,116 +268,12 @@ def save_note():
     button_create =tk.Button(create_view, text="Add Another", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12, "bold"), justify=CENTER, command=create_note)
     button_create.place(x=10, y=230)
     
-    button_cancel =tk.Button(create_view, text="Dashboard", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12, "bold"), justify=CENTER,command=user_authentication)
+    button_cancel =tk.Button(create_view, text="Dashboard", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12, "bold"), justify=CENTER,command=dashboard)
     button_cancel.place(x=182, y=230)
     
     copy_right = tk.Label(create_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
     copy_right.place(x=25, y=280)
-
-def search_by_subject(search_title):
-    global matching_notes  # Make matching_notes global
-
-    if not search_title:
-        showerror("Error", "Please enter a search_title to search.")
-        return
-
-    if global_username not in user_notes:
-        messagebox.showinfo("Info", "No notes found for this user.")
-        return
-
-    matching_notes = []
-    for index, note in enumerate(user_notes[global_username]):
-        if search_title.lower() in note["Subject"].lower():
-            matching_notes.append((index, note))
-
-    if not matching_notes:
-        messagebox.showinfo("Info", "No matching notes found.")
-        return
-
-    global current_note_index
-    current_note_index = 0
-    display_note_details(matching_notes)
-
-def display_search_results(matching_notes):
-    global current_note_index
-
-    retrieve_view = Frame(window, width=368, height=300, bg=theme_color4)
-    retrieve_view.grid(row=1, column=0)
-
-    note_view_text = Label(
-        retrieve_view,
-        text=f"Retrieve Notes for {current_user}",
-        width=21,
-        padx=4,
-        anchor=CENTER,
-        font=("Helvetica 12"),
-        bg=theme_color4,
-        fg=theme_color3,
-    )
-    note_view_text.place(x=80, y=10)
-
-    note_details = matching_notes[current_note_index][1]
-
-    date_label = tk.Label(
-        retrieve_view,
-        text="Date: ",
-        font=("Helvetica 12"),
-        bg=theme_color4,
-        fg=theme_color3,
-    )
-    date_label.place(x=5, y=50)
-
-    date = note_details["Date"]
-    date_text = tk.Label(
-        retrieve_view,
-        text=date,
-        font=("Helvetica 12"),
-        bg=theme_color4,
-        fg=theme_color3,
-    )
-    date_text.place(x=80, y=50)
-
-    subject_label = tk.Label(
-        retrieve_view,
-        text="Subject: ",
-        font=("Helvetica 12"),
-        bg=theme_color4,
-        fg=theme_color3,
-    )
-    subject_label.place(x=5, y=80)
-
-    subject = note_details["Subject"]
-    subject_text = tk.Label(
-        retrieve_view,
-        text=subject,
-        font=("Helvetica 12"),
-        bg=theme_color4,
-        fg=theme_color3,
-    )
-    subject_text.place(x=80, y=80)
-
-    notes_label = tk.Label(
-        retrieve_view,
-        text="Notes: ",
-        font=("Helvetica 12"),
-        bg=theme_color4,
-        fg=theme_color3,
-    )
-    notes_label.place(x=5, y=110)
-
-    notes = note_details["Notes"]
-    notes_text = tk.Label(
-        retrieve_view,
-        text=notes,
-        font=("Helvetica 12"),
-        bg=theme_color4,
-        fg=theme_color3,
-        wraplength=300,
-        justify=LEFT,
-        anchor=NW,
-    )
-    notes_text.place(x=80, y=110)
-    
+ 
 def all_note_lists():
     global keyword
     global user_notes  
@@ -405,7 +311,7 @@ def all_note_lists():
         search_button = tk.Button(option_view, text="Search", width=5, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12), justify=CENTER, command=search_notes)
         search_button.place(x=280, y=200)
 
-        button_cancel = tk.Button(option_view, text="Go to Dashboard", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12), justify=CENTER, command=user_authentication)
+        button_cancel = tk.Button(option_view, text="Go to Dashboard", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12), justify=CENTER, command=dashboard)
         button_cancel.place(x=110, y=240)
 
     copy_right = Label(option_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
@@ -442,36 +348,31 @@ def search_notes():
 def display_search_results(matching_notes):
     global current_note_index
     global keyword
+    keyword_text = keyword.get("1.0", tk.END).strip()
 
     retrieve_view = Frame(window, width=368, height=300, bg=theme_color4)
     retrieve_view.grid(row=1, column=0)
 
-    note_view_text = Label( retrieve_view, text=f"Retrieve Notes for {keyword}", width=21, padx=4, anchor=CENTER, font=("Helvetica 12"), bg=theme_color4, fg=theme_color3)
+    note_view_text = Label(retrieve_view, text=f"Search Result of '{keyword_text}'", width=21, padx=4, anchor=CENTER, font=("Helvetica 12"), bg=theme_color4, fg=theme_color3)
     note_view_text.place(x=80, y=10)
 
-    note_details = matching_notes[current_note_index][1]
+    y_position = 50
+    note_number = 1
+    
+    for note_index, note_dict in matching_notes:
+        subject = note_dict["Subject"] 
+        matched_subject = Label(retrieve_view, text=f"{note_number}) {subject}", font=("Helvetica 12"), bg=theme_color4, fg=theme_color3, justify=LEFT, anchor=NW)
+        matched_subject.place(x=5, y=y_position)
+        matched_subject.bind("<Button-1>", lambda event, index=note_index: display_full_note(index, note_dict["Date"], note_dict["Subject"], note_dict["Notes"]))
+        y_position += 30
+        note_number += 1
+    button_cancel = tk.Button(retrieve_view, text="Back", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12), justify=CENTER, command=all_note_lists)
+    button_cancel.place(x=20, y=240)
+    button_cancel = tk.Button(retrieve_view, text="Dashboard", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12), justify=CENTER, command=dashboard)
+    button_cancel.place(x=180, y=240)
 
-    date_label = tk.Label( retrieve_view, text="Date: ", font=("Helvetica 12"), bg=theme_color4, fg=theme_color3 )
-    date_label.place(x=5, y=50)
-
-    date = note_details["Date"]
-    date_text = tk.Label( retrieve_view, text=date, font=("Helvetica 12"), bg=theme_color4, fg=theme_color3 )
-    date_text.place(x=80, y=50)
-
-    subject_label = tk.Label( retrieve_view, text="Subject: ", font=("Helvetica 12"), bg=theme_color4, fg=theme_color3 )
-    subject_label.place(x=5, y=80)
-
-    subject = note_details["Subject"]
-    subject_text = tk.Label( retrieve_view, text=subject, font=("Helvetica 12"), bg=theme_color4, fg=theme_color3 )
-    subject_text.place(x=80, y=80)
-
-    notes_label = tk.Label( retrieve_view, text="Notes: ", font=("Helvetica 12"),  bg=theme_color4, fg=theme_color3 )
-    notes_label.place(x=5, y=110)
-
-    notes = note_details["Notes"]
-    notes_text = tk.Label( retrieve_view, text=notes, font=("Helvetica 12"), bg=theme_color4, fg=theme_color3, wraplength=300, justify=LEFT, anchor=NW)
-    notes_text.place(x=80, y=110)
-
+    copy_right = Label(retrieve_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
+    copy_right.place(x=25, y=280)
 
 def display_full_note(note_index, note_date, note_subject, note_content):
     global current_note_index
