@@ -301,7 +301,13 @@ def all_note_lists():
             subject = note["Subject"][:25]
             notes_label = tk.Label(option_view, text=f"{note_number}) {subject}", font=("Helvetica", 12), bg=theme_color4, fg=theme_color3)
             notes_label.place(x=10, y=note_position)
-            notes_label.bind("<Button-1>", lambda event, index=note_index: display_full_note(index, note["Date"], note["Subject"], note["Notes"]))
+            
+            #notes_label.bind("<Button-1>", lambda event, index=note_index: display_full_note(index, note["Date"], note["Subject"], note["Notes"]))
+
+            def on_click(event, index=note_index, date=note["Date"], subject=note["Subject"], notes=note["Notes"]):
+                display_full_note(index, date, subject, notes)
+            notes_label.bind("<Button-1>", on_click)
+
             note_position += 30
             note_number += 1
 
@@ -363,7 +369,12 @@ def display_search_results(matching_notes):
         subject = note_dict["Subject"] 
         matched_subject = Label(retrieve_view, text=f"{note_number}) {subject}", font=("Helvetica 12"), bg=theme_color4, fg=theme_color3, justify=LEFT, anchor=NW)
         matched_subject.place(x=5, y=y_position)
-        matched_subject.bind("<Button-1>", lambda event, index=note_index: display_full_note(index, note_dict["Date"], note_dict["Subject"], note_dict["Notes"]))
+
+        #matched_subject.bind("<Button-1>", lambda event, index=current_note_index: display_full_note(index, note_dict["Date"], note_dict["Subject"], note_dict["Notes"]))
+
+        def on_click(event, index=note_index, date=note_dict["Date"], subject=note_dict["Subject"], notes=note_dict["Notes"]):
+                display_full_note(index, date, subject, notes)
+        matched_subject.bind("<Button-1>", on_click)
         y_position += 30
         note_number += 1
     button_cancel = tk.Button(retrieve_view, text="Back", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12), justify=CENTER, command=all_note_lists)
