@@ -114,22 +114,17 @@ def dashboard():
     button =Button(option_view, text="2. Retrieve a note", padx=5, justify=LEFT, height=1, bg=theme_color4,borderwidth=0, font=("Helvetica 11"), command=all_note_lists)
     button.place(x=50, y=130)
 
-    button =Button(option_view, text="3. Logout", padx=5, height=1, justify=LEFT, bg=theme_color4,borderwidth=0, font=("Helvetica 11"), command=logout)
+    button =Button(option_view, text="3. Logout", padx=5, height=1, justify=LEFT, bg=theme_color4,borderwidth=0, font=("Helvetica 11"), command=log_out)
     button.place(x=50, y=170)
 
     copy_right = Label(option_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
     copy_right.place(x=25, y=280)
 
-def logout():
-    global global_username
-    global_username = None
-    main.grid_forget()
-    login_page()  
-
 note_date = None
 note_subject = None
 new_notes = None
 user_notes = []
+
 def get_selected_date(cal):
     global note_date 
     selected_date = cal.get_date()
@@ -272,7 +267,111 @@ def save_note():
     copy_right = tk.Label(create_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
     copy_right.place(x=25, y=280)
 
+def search_by_subject(keyword):
+    global matching_notes  # Make matching_notes global
 
+    if not keyword:
+        showerror("Error", "Please enter a keyword to search.")
+        return
+
+    if current_user not in user_notes:
+        messagebox.showinfo("Info", "No notes found for this user.")
+        return
+
+    matching_notes = []
+    for index, note in enumerate(user_notes[current_user]):
+        if keyword.lower() in note["Subject"].lower():
+            matching_notes.append((index, note))
+
+    if not matching_notes:
+        messagebox.showinfo("Info", "No matching notes found.")
+        return
+
+    global current_note_index
+    current_note_index = 0
+    display_note_details(matching_notes)
+
+
+def display_note_details(matching_notes):
+    global current_note_index
+
+    retrieve_view = Frame(window, width=368, height=300, bg=theme_color4)
+    retrieve_view.grid(row=1, column=0)
+
+    note_view_text = Label(
+        retrieve_view,
+        text=f"Retrieve Notes for {current_user}",
+        width=21,
+        padx=4,
+        anchor=CENTER,
+        font=("Helvetica 12"),
+        bg=theme_color4,
+        fg=theme_color3,
+    )
+    note_view_text.place(x=80, y=10)
+
+    note_details = matching_notes[current_note_index][1]
+
+    date_label = tk.Label(
+        retrieve_view,
+        text="Date: ",
+        font=("Helvetica 12"),
+        bg=theme_color4,
+        fg=theme_color3,
+    )
+    date_label.place(x=5, y=50)
+
+    date = note_details["Date"]
+    date_text = tk.Label(
+        retrieve_view,
+        text=date,
+        font=("Helvetica 12"),
+        bg=theme_color4,
+        fg=theme_color3,
+    )
+    date_text.place(x=80, y=50)
+
+    subject_label = tk.Label(
+        retrieve_view,
+        text="Subject: ",
+        font=("Helvetica 12"),
+        bg=theme_color4,
+        fg=theme_color3,
+    )
+    subject_label.place(x=5, y=80)
+
+    subject = note_details["Subject"]
+    subject_text = tk.Label(
+        retrieve_view,
+        text=subject,
+        font=("Helvetica 12"),
+        bg=theme_color4,
+        fg=theme_color3,
+    )
+    subject_text.place(x=80, y=80)
+
+    notes_label = tk.Label(
+        retrieve_view,
+        text="Notes: ",
+        font=("Helvetica 12"),
+        bg=theme_color4,
+        fg=theme_color3,
+    )
+    notes_label.place(x=5, y=110)
+
+    notes = note_details["Notes"]
+    notes_text = tk.Label(
+        retrieve_view,
+        text=notes,
+        font=("Helvetica 12"),
+        bg=theme_color4,
+        fg=theme_color3,
+        wraplength=300,
+        justify=LEFT,
+        anchor=NW,
+    )
+    notes_text.place(x=80, y=110)
+    
 def all_note_lists():
     global user_notes  
     global global_username
@@ -307,8 +406,9 @@ def all_note_lists():
         title_searched.place(x=10, y=200)
 
         def search_notes():
-            search_title = title_searched.get("1.0", tk.END).strip()
-            search_results = search_notes_by_title(search_title)
+            search_title = title_searched.get("1.0", "end-1c")
+            search_by_subject(search_title)
+            search_results = search_by_subject(search_title)
             if search_results:
                 print("Search Results:")
                 for index, note in search_results:
@@ -325,13 +425,110 @@ def all_note_lists():
     copy_right = Label(option_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
     copy_right.place(x=25, y=280)
 
-def search_notes_by_title(search_title):
-    search_results = []
-    for user, notes_list in user_notes.items():
-        for index, note in enumerate(notes_list, start=1):
-            if search_title.lower() in note["Subject"].lower():
-                search_results.append((user, index, note))
-    return search_results
+def search_by_subject():
+    global keyword, matching_notes  # Make matching_notes global
+
+    keyword_text = keyword.get()
+
+    if not keyword_text:
+        showerror("Error", "Please enter a keyword to search.")
+        return
+
+    if current_user not in user_notes:
+        messagebox.showinfo("Info", "No notes found for this user.")
+        return
+
+    matching_notes = []
+    for index, note in enumerate(user_notes[current_user]):
+        if keyword_text.lower() in note["Subject"].lower():
+            matching_notes.append((index, note))
+
+    if not matching_notes:
+        messagebox.showinfo("Info", "No matching notes found.")
+        return
+
+    global current_note_index
+    current_note_index = 0
+    display_note_details(matching_notes)
+def display_note_details(matching_notes):
+    global current_note_index
+
+    retrieve_view = Frame(window, width=368, height=300, bg=theme_color4)
+    retrieve_view.grid(row=1, column=0)
+
+    note_view_text = Label(
+        retrieve_view,
+        text=f"Retrieve Notes for {current_user}",
+        width=21,
+        padx=4,
+        anchor=CENTER,
+        font=("Helvetica 12"),
+        bg=theme_color4,
+        fg=theme_color3,
+    )
+    note_view_text.place(x=80, y=10)
+
+    note_details = matching_notes[current_note_index][1]
+
+    date_label = tk.Label(
+        retrieve_view,
+        text="Date: ",
+        font=("Helvetica 12"),
+        bg=theme_color4,
+        fg=theme_color3,
+    )
+    date_label.place(x=5, y=50)
+
+    date = note_details["Date"]
+    date_text = tk.Label(
+        retrieve_view,
+        text=date,
+        font=("Helvetica 12"),
+        bg=theme_color4,
+        fg=theme_color3,
+    )
+    date_text.place(x=80, y=50)
+
+    subject_label = tk.Label(
+        retrieve_view,
+        text="Subject: ",
+        font=("Helvetica 12"),
+        bg=theme_color4,
+        fg=theme_color3,
+    )
+    subject_label.place(x=5, y=80)
+
+    subject = note_details["Subject"]
+    subject_text = tk.Label(
+        retrieve_view,
+        text=subject,
+        font=("Helvetica 12"),
+        bg=theme_color4,
+        fg=theme_color3,
+    )
+    subject_text.place(x=80, y=80)
+
+    notes_label = tk.Label(
+        retrieve_view,
+        text="Notes: ",
+        font=("Helvetica 12"),
+        bg=theme_color4,
+        fg=theme_color3,
+    )
+    notes_label.place(x=5, y=110)
+
+    notes = note_details["Notes"]
+    notes_text = tk.Label(
+        retrieve_view,
+        text=notes,
+        font=("Helvetica 12"),
+        bg=theme_color4,
+        fg=theme_color3,
+        wraplength=300,
+        justify=LEFT,
+        anchor=NW,
+    )
+    notes_text.place(x=80, y=110)
 
 def display_full_note(note_index, note_date, note_subject, note_content):
     global current_note_index
@@ -442,6 +639,10 @@ def edit_current_note():
         save_button = tk.Button(note_edit_window, text="Save",padx=5, height=1, justify=LEFT, bg=theme_color5,fg=theme_color4,borderwidth=0, font=("Helvetica 11"), command=save_edited_note)
         save_button.pack()
 
+def log_out():
+    global current_user
+    current_user = None
+    login_page()  # Navigate back to the login page
 
 login_page()
 window.mainloop()
