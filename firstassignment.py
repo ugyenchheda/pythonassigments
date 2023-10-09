@@ -6,6 +6,7 @@ from tkinter.messagebox import showerror
 from PIL import Image, ImageTk
 import os
 from tkinter import messagebox
+from datetime import datetime
 
 theme_color1 = "blue"
 theme_color2 = "#3b474d"
@@ -14,7 +15,6 @@ theme_color3 = "black"
 theme_color4 = "white"
 theme_color5 = "#3b474d"
 theme_danger = "red"
-transparent_theme = "FF0000AA"
 
 window = Tk()
 window.geometry('368x420')
@@ -68,7 +68,7 @@ def login_page():
     Password = ttk.Entry(main, width=21, justify=LEFT, font=("Helvetica 12"))
     Password.place(x=80, y=175)
 
-    button = Button( main,text="Continue", width=25, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica 12 bold"), justify=CENTER, command=user_authentication)
+    button = Button( main,text="Continue", width=25, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica 12"), justify=CENTER, command=user_authentication)
     button.place(x=50, y=230)
 
     copy_right = Label( main, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=("Helvetica 9"), bg=theme_color4, fg=theme_color3)
@@ -99,16 +99,16 @@ def dashboard():
     option_view = Frame(window, width=368, height=300, bg=theme_color4)
     option_view.grid(row=1, column=0)
 
-    note_view_text = Label(option_view, text="Choose Option", width=21, padx=4, anchor=CENTER, font=('Helvetica 12'), bg=theme_color4, fg=theme_color3)
-    note_view_text.place(x=80, y=40)
+    note_view_text = Label(option_view, text="Choose Option", width=21, padx=4, anchor=CENTER, font=('Helvetica 14'), bg=theme_color4, fg=theme_color3)
+    note_view_text.place(x=60, y=40)
 
-    button =Button(option_view, text="1. Create a note", padx=5, justify=LEFT, height=1, bg=theme_color4,borderwidth=0, font=("Helvetica 11"), command=create_note)
+    button =Button(option_view, text="1. Create a note", padx=5, justify=LEFT, height=1, bg=theme_color4,borderwidth=0, font=("Helvetica 12"), command=create_note)
     button.place(x=50, y=90)
 
-    button =Button(option_view, text="2. Retrieve a note", padx=5, justify=LEFT, height=1, bg=theme_color4,borderwidth=0, font=("Helvetica 11"), command=all_note_lists)
+    button =Button(option_view, text="2. Retrieve a note", padx=5, justify=LEFT, height=1, bg=theme_color4,borderwidth=0, font=("Helvetica 12"), command=all_note_lists)
     button.place(x=50, y=130)
 
-    button =Button(option_view, text="3. Logout", padx=5, height=1, justify=LEFT, bg=theme_color4,borderwidth=0, font=("Helvetica 11"), command=log_out)
+    button =Button(option_view, text="3. Logout", padx=5, height=1, justify=LEFT, bg=theme_color4,borderwidth=0, font=("Helvetica 12"), command=log_out)
     button.place(x=50, y=170)
 
     copy_right = Label(option_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
@@ -131,9 +131,14 @@ def get_selected_date(cal):
 
 def show_calendar(event):
     calendar_window = tk.Toplevel(window)
-    calendar_window.title("Select Date")
+    calendar_window.title("Select Preferred Date")
+    x_position = window.winfo_rootx() + event.x
+    y_position = window.winfo_rooty() + event.y
 
-    cal = Calendar(calendar_window, selectmode="day", year=2023, month=9, day=30)
+    calendar_window.geometry(f'300x220+{x_position}+{y_position}')
+
+    current_date = datetime.now()
+    cal = Calendar(calendar_window, selectmode="day", year=current_date.year, month=current_date.month, day=current_date.day)
     cal.pack()
 
     get_date_button = tk.Button(calendar_window, text="Get Selected Date", command=lambda: get_selected_date(cal))
@@ -170,10 +175,10 @@ def create_note():
     new_notes = tk.Text(create_view,  font=("Helvetica 12"), height=4, width=31, highlightbackground="grey", highlightthickness=1)
     new_notes.place(x=75, y=110)
     
-    button_create =tk.Button(create_view, text="Save", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12, "bold"), justify=CENTER, command=save_note)
+    button_create =tk.Button(create_view, text="Save", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12), justify=CENTER, command=save_note)
     button_create.place(x=10, y=230)
     
-    button_cancel =tk.Button(create_view, text="Cancel", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12, "bold"), justify=CENTER,command=dashboard)
+    button_cancel =tk.Button(create_view, text="Cancel", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12), justify=CENTER,command=dashboard)
     button_cancel.place(x=182, y=230)
     
     copy_right = Label(create_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
@@ -283,25 +288,25 @@ def all_note_lists():
     option_view.grid(row=1, column=0)
 
     note_view_text = Label(option_view, text=f"Notes of {global_username}", width=21, padx=4, anchor=CENTER, font=('Helvetica 16 bold'), bg=theme_color4, fg=theme_color3)
-    note_view_text.place(x=40, y=30)
+    note_view_text.place(x=40, y=10)
 
     if global_username not in user_notes or not user_notes[global_username]:
         no_notes_label = Label(option_view, text="No notes has been added yet.", font=("Helvetica", 12, "bold"), bg=theme_color4, fg=theme_danger)
         no_notes_label.place(x=80, y=110)
 
-        button_create = tk.Button(option_view, text="Add", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12, "bold"), justify=CENTER, command=create_note)
+        button_create = tk.Button(option_view, text="Add", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12), justify=CENTER, command=create_note)
         button_create.place(x=10, y=230)
 
-        button_cancel = tk.Button(option_view, text="Dashboard", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12, "bold"), justify=CENTER, command=user_authentication)
+        button_cancel = tk.Button(option_view, text="Dashboard", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12), justify=CENTER, command=dashboard)
         button_cancel.place(x=182, y=230)
     else:
-        note_position = 80
+        note_position = 50
         note_number = 1
         for note_index, note in enumerate(user_notes[global_username]):
             subject = note["Subject"][:25]
             notes_label = tk.Label(option_view, text=f"{note_number}) {subject}", font=("Helvetica", 12), bg=theme_color4, fg=theme_color3)
             notes_label.place(x=10, y=note_position)
-            
+
             #notes_label.bind("<Button-1>", lambda event, index=note_index: display_full_note(index, note["Date"], note["Subject"], note["Notes"]))
 
             def on_click(event, index=note_index, date=note["Date"], subject=note["Subject"], notes=note["Notes"]):
@@ -349,7 +354,6 @@ def search_notes():
     global current_note_index
     current_note_index = 0
     display_search_results(matching_notes)
-
 
 def display_search_results(matching_notes):
     global current_note_index
@@ -410,10 +414,10 @@ def display_full_note(note_index, note_date, note_subject, note_content):
     note_label = tk.Label(note_view, text="Note: ", font=('Helvetica 12'), bg=theme_color4)
     note_label.place(x=10, y=130)  
 
-    note_value = tk.Label(note_view, text=note_content, wraplength=250, font=('Helvetica 12'), bg=theme_color4)
+    note_value = tk.Label(note_view, text=note_content, anchor=W, wraplength=250, font=('Helvetica 12'), bg=theme_color4)
     note_value.place(x=70, y=130)
     
-    button_edit =tk.Button(note_view, text="Edit", width=10, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12, "bold"), justify=CENTER, command=edit_current_note)
+    button_edit =tk.Button(note_view, text="Edit", width=10, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12), justify=CENTER, command=edit_current_note)
     button_edit.place(x=10, y=230)
 
     def delete_current_note():
@@ -423,10 +427,10 @@ def display_full_note(note_index, note_date, note_subject, note_content):
             all_note_lists()
             messagebox.showinfo("Note Deleted", "Notes deleted successfully!")
 
-    button_delete =tk.Button(note_view, text="Delete", width=10, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12, "bold"), justify=CENTER, command=delete_current_note)
+    button_delete =tk.Button(note_view, text="Delete", width=10, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12), justify=CENTER, command=delete_current_note)
     button_delete.place(x=120, y=230)
     
-    button_done =tk.Button(note_view, text="Done", width=10, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12, "bold"), justify=CENTER,command=dashboard)
+    button_done =tk.Button(note_view, text="Back", width=10, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12), justify=CENTER,command=all_note_lists)
     button_done.place(x=230, y=230)
     
     copy_right = Label(note_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
@@ -489,7 +493,7 @@ def edit_current_note():
                 else:
                     showerror("Error", "Invalid note index.")
             else:
-                showerror("Error", "User not found in user_notes.")
+                showerror("Error", "User not found.")
         
         save_button = tk.Button(note_edit_window, text="Save",padx=5, height=1, justify=LEFT, bg=theme_color5,fg=theme_color4,borderwidth=0, font=("Helvetica 11"), command=save_edited_note)
         save_button.pack()
@@ -501,7 +505,6 @@ def log_out():
     if main:
         main.destroy()
     login_page() 
-
 
 login_page()
 window.mainloop()
