@@ -500,9 +500,6 @@ def edit_current_note():
 
 def log_out():
     global global_username
-    
-    global current_user
-    current_username= None
     global_username = None
     global main
     if main:
