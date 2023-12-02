@@ -302,9 +302,8 @@ def add_json_files():
                     date = note.get("date", "")
                     subject = note.get("subject", "")
                     notes_content = note.get("text", "")
-                    url = note.get("url", "")  # Add this line to get the URL field
+                    url = note.get("url", "")  
 
-                    # Insert the note into the database, including the current user ID and URL
                     cursor.execute('''
                         INSERT INTO user_notes (user_id, date, subject, notes, url)
                         VALUES (?, ?, ?, ?, ?)
