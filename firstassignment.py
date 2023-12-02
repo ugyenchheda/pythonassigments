@@ -128,10 +128,6 @@ def save_user(username_entry, password_entry):
     copy_right = tk.Label(user_creation_window, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=tk.CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
     copy_right.pack()
 
-    
-
-
-
 def show_password():
     Password.config(show='')
     main.after(1000, hide_password)
@@ -287,12 +283,15 @@ def add_json_files():
         dashboard()
         return
 
-    option_view = tk.Frame(window, width=368, height=300, bg=theme_color4)
-    option_view.grid(row=1, column=0)
+    importview = tk.Frame(window, width=368, height=300, bg=theme_color5, padx=30, pady=30)
+    importview.grid(row=1, column=0)
 
-    listbox = tk.Listbox(option_view, selectmode=tk.MULTIPLE, width=80, height=15)
+    listbox = tk.Listbox(importview, selectmode=tk.MULTIPLE)
     listbox.pack(pady=10)
 
+    back_button = tk.Button(importview, text="Done", command=dashboard)
+    back_button.pack()
+    
     for file_path in file_paths:
         with open(file_path, 'r') as json_file:
             try:
@@ -312,7 +311,7 @@ def add_json_files():
                     ''', (global_user_id, date, subject, notes_content, url))
 
                     conn.commit()
-                    listbox.insert(tk.END, f"Date: {date}, Subject: {subject}, Notes: {notes_content}, URL: {url}")
+                    listbox.insert(tk.END, f"Date: {date}, Subject: {subject}")
 
             except json.JSONDecodeError:
                 print(f"Error decoding JSON file: {file_path}")
