@@ -2,15 +2,17 @@ from tkinter import ttk
 import tkinter as tk
 from tkinter import *
 from tkcalendar import Calendar
-from tkinter.messagebox import showerror
 from PIL import Image, ImageTk
 import os
 from tkinter import messagebox
+import tkinter.messagebox as messagebox
+from tkinter.messagebox import showerror
 from datetime import datetime
 from tkinter import filedialog
 import json
 import sqlite3
 import requests
+from tkinter import LabelFrame
 
 # Connect to SQLite database
 conn = sqlite3.connect('notes_database.db')
@@ -34,6 +36,7 @@ theme_color2 = "#3b474d"
 theme_color3 = "black"
 theme_color4 = "white"
 theme_color5 = "#3b474d"
+theme_color6 = "#efefef"
 theme_danger = "red"
 
 window = Tk()
@@ -283,13 +286,16 @@ def add_json_files():
         dashboard()
         return
 
-    importview = tk.Frame(window, width=368, height=300, bg=theme_color5, padx=30, pady=30)
+    importview = tk.Frame(window, width=500, height=300, bg=theme_color6, padx=10, pady=10)
     importview.grid(row=1, column=0)
+    
+    title_label = tk.Label(importview, text="Notes Imported", anchor=tk.CENTER, font=('Helvetica 12'), fg="black")
+    title_label.pack(pady=5)
 
-    listbox = tk.Listbox(importview, selectmode=tk.MULTIPLE)
-    listbox.pack(pady=10)
+    listbox = tk.Listbox(importview, selectmode=tk.MULTIPLE, width=40)
+    listbox.pack(pady=5)
 
-    back_button = tk.Button(importview, text="Done", command=dashboard)
+    back_button = tk.Button(importview, text="Done", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12), justify=CENTER, command=dashboard)
     back_button.pack()
     
     for file_path in file_paths:
@@ -376,8 +382,10 @@ def save_note():
     notes_value = new_notes.get("1.0", tk.END).strip()
 
     if not date_value:
-        showerror("Error", "Please select a date.")
-        return
+        current_date = datetime.now().strftime("%m/%d/%Y")
+        date_value = current_date
+        note_date.delete("1.0", tk.END)
+        note_date.insert(tk.END, current_date)
 
     if not subject_value:
         showerror("Error", "Please enter a subject.")
@@ -652,8 +660,6 @@ def display_full_note(note_index, note_date, note_subject, note_content, note_ur
     copy_right = Label(note_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
     copy_right.place(x=25, y=280)
 
-import tkinter.messagebox as messagebox
-from tkinter import LabelFrame
 
 def edit_current_note():
     global current_note_index
