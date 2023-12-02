@@ -360,10 +360,10 @@ def create_note():
     new_notes.place(x=75, y=140)
     
     button_create =tk.Button(create_view, text="Save", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12), justify=CENTER, command=save_note)
-    button_create.place(x=10, y=230)
+    button_create.place(x=25, y=230)
     
     button_cancel =tk.Button(create_view, text="Cancel", width=15, padx=5, height=1, bg=theme_color2, fg=theme_color4, font=("Helvetica", 12), justify=CENTER,command=dashboard)
-    button_cancel.place(x=182, y=230)
+    button_cancel.place(x=190, y=230)
     
     copy_right = Label(create_view, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
     copy_right.place(x=25, y=280)
