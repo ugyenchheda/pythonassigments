@@ -60,64 +60,73 @@ top_background_photo = ImageTk.PhotoImage(top_background_image)
 top_background_label = Label(top, image=top_background_photo)
 top_background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
+user_creation_window = None
 def create_user():
-    # Create a new window for user creation
+    global user_creation_window
     user_creation_window = tk.Toplevel(window)
     user_creation_window.title("Create User")
 
-    # Username entry
     username_label = tk.Label(user_creation_window, text="Username:")
     username_label.pack()
 
     username_entry = ttk.Entry(user_creation_window)
     username_entry.pack()
 
-    # Password entry
     password_label = tk.Label(user_creation_window, text="Password:")
     password_label.pack()
 
     password_entry = ttk.Entry(user_creation_window, show='*')
     password_entry.pack()
 
-    def save_user():
-        new_username = username_entry.get()
-        new_password = password_entry.get()
+    save_button = tk.Button(user_creation_window, text="Register", command=lambda: save_user(username_entry, password_entry))
+    save_button.pack()
 
-        # Check if username or password is empty
-        if not new_username or not new_password:
-            messagebox.showerror("Error", "Both username and password are required.")
-            return
+    copy_right = tk.Label(user_creation_window, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=tk.CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
+    copy_right.pack()
 
-        try:
-            # Connect to the database (replace 'your_database.db' with the actual name of your database file)
-            conn = sqlite3.connect('your_database.db')
-            cursor = conn.cursor()
+def save_user(username_entry, password_entry):
+    new_username = username_entry.get()
+    new_password = password_entry.get()
 
-            # Insert the new user into the users table
+    if not new_username or not new_password:
+        messagebox.showerror("Error", "Both username and password are required.")
+        return
+
+    try:
+        conn = sqlite3.connect('notes_database.db')
+        cursor = conn.cursor()
+
+        cursor.execute('''
+            SELECT * FROM users
+            WHERE username = ?
+        ''', (new_username,))
+
+        existing_user = cursor.fetchone()
+
+        if existing_user:
+            messagebox.showerror("Error", "Username already exists. Please choose a different username.")
+        else:
             cursor.execute('''
                 INSERT INTO users (username, password)
                 VALUES (?, ?)
             ''', (new_username, new_password))
 
-            # Commit the changes and close the connection
             conn.commit()
             conn.close()
 
             messagebox.showinfo("User Created", "User successfully created.")
             user_creation_window.destroy()
 
-        except Exception as e:
-            messagebox.showerror("Error", f"Failed to create user: {str(e)}")
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to create user: {str(e)}")
 
-        user_creation_window.destroy()
+    user_creation_window.destroy()
 
-    # Button to save user information
-    save_button = tk.Button(user_creation_window, text="Save", command=save_user)
+    save_button = tk.Button(user_creation_window, text="Save", command=lambda: save_user(username_entry, password_entry))
     save_button.pack()
 
     copy_right = tk.Label(user_creation_window, text="© 2023 Ugyen. All rights reserved.", width=42, padx=4, anchor=tk.CENTER, font=('Helvetica 9'), bg=theme_color4, fg=theme_color3)
     copy_right.pack()
-
 
     
 
